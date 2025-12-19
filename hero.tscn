@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cq27x2b3tefy5"]
+
+[ext_resource type="Script" uid="uid://bw17ftyga7l2r" path="res://hero.gd" id="1_p1r5x"]
+[ext_resource type="Texture2D" uid="uid://djvmcr0nyfm0j" path="res://icon.svg" id="2_u1ipw"]
+[ext_resource type="PackedScene" uid="uid://3stbmev5qth1" path="res://bullet.tscn" id="2_xpv8o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xpv8o"]
+size = Vector2(127, 126)
+
+[node name="Hero" type="CharacterBody2D"]
+collision_mask = 5
+script = ExtResource("1_p1r5x")
+bullet_scene = ExtResource("2_xpv8o")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_u1ipw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_xpv8o")
