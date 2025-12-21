@@ -27,7 +27,6 @@ func _initialize_components(dir: Vector2, spd: float, max_dist: float):
 	damage_dealer = DamageDealerComponent.new(damage, can_hit_multiple)
 
 func _connect_signals():
-	projectile_component.max_distance_reached.connect(_on_max_distance_reached)
 	damage_dealer.damage_dealt.connect(_on_damage_dealt)
 	
 	# Conecta sinais de colisão

@@ -4,7 +4,6 @@
 class_name ProjectileComponent
 extends RefCounted
 
-signal max_distance_reached()
 signal target_hit(target: Node)
 
 var direction: Vector2

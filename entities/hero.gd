@@ -54,7 +54,7 @@ func _physics_process(delta):
 	_handle_movement(delta)
 	_handle_shooting()
 
-func _handle_movement(delta: float):
+func _handle_movement(_delta: float):
 	var input_vector = movement_component.get_input_vector()
 	velocity = movement_component.calculate_velocity(input_vector)
 	move_and_slide()
@@ -79,10 +79,10 @@ func get_max_hp() -> float:
 	return health_component.get_max_hp()
 
 # Callbacks
-func _on_damage_taken(damage: float, current: float):
+func _on_damage_taken(_damage: float, _current: float):
 	damage_feedback.play_feedback()
 
-func _on_health_changed(current: float, maximum: float):
+func _on_health_changed(_current: float, _maximum: float):
 	pass  # Health bar já está conectada diretamente
 
 func _on_death():

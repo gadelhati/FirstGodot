@@ -84,7 +84,7 @@ func _check_contact_area():
 		var overlapping_bodies = contact_area.get_overlapping_bodies()
 		for body in overlapping_bodies:
 			contact_damage_component.try_deal_contact_damage(body)
-			
+
 func _on_contact_area_body_entered(body: Node2D):
 	# Detecta quando Hero entra na área
 	if enable_contact_damage:
@@ -107,7 +107,7 @@ func set_contact_damage_enabled(enabled: bool):
 	enable_contact_damage = enabled
 
 # Callbacks
-func _on_damage_taken(damage: float, current: float):
+func _on_damage_taken(_damage: float, _current: float):
 	damage_feedback.play_feedback()
 
 func _on_death():
@@ -116,6 +116,6 @@ func _on_death():
 	# Animação de morte ou efeitos podem ser adicionados aqui
 	queue_free()
 
-func _on_contact_damage_dealt(target: Node, damage: float):
+func _on_contact_damage_dealt(_target: Node, _damage: float):
 	# Feedback visual ou sonoro quando causa dano por contato
 	pass
