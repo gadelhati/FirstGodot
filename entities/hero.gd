@@ -20,7 +20,7 @@ var damage_feedback: DamageFeedbackComponent
 
 @export_group("Weapon")
 @export var bullet_speed: float = 500.0
-@export var max_bullet_distance: float = 1000.0
+@export var max_bullet_distance: float = 500.0
 @export var fire_rate: float = 0.2
 @export var bullet_scene: PackedScene
 @export var spawn_point: Node2D
