@@ -1,25 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjtp87mr2e030"]
+[gd_scene load_steps=5 format=3 uid="uid://bjtp87mr2e030"]
 
-[ext_resource type="Script" uid="uid://mrif4a7y4qnt" path="res://enemy.gd" id="1_4gyqm"]
+[ext_resource type="Script" uid="uid://bjs4t0atwre1m" path="res://entities/enemy.gd" id="1_qi2p4"]
 [ext_resource type="Texture2D" uid="uid://djvmcr0nyfm0j" path="res://icon.svg" id="2_qi2p4"]
+[ext_resource type="Script" uid="uid://b71wb5ionwtjq" path="res://UI/health_bar.gd" id="3_iifgy"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_iifgy"]
-size = Vector2(127, 125)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xpv8o"]
+size = Vector2(127, 126)
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("health_bar")]
 collision_layer = 4
-collision_mask = 3
-script = ExtResource("1_4gyqm")
+collision_mask = 5
+script = ExtResource("1_qi2p4")
+health_bar = NodePath("HealthBar")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_qi2p4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0.5)
-shape = SubResource("RectangleShape2D_iifgy")
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_xpv8o")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
-offset_left = -64.0
-offset_top = -93.0
-offset_right = 63.0
-offset_bottom = -66.0
+offset_left = -61.0
+offset_top = -100.0
+offset_right = 66.0
+offset_bottom = -73.0
+script = ExtResource("3_iifgy")
