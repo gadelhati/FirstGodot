@@ -2,3 +2,20 @@
 .godot/
 /assets/
 /android/
+
+# Temporary files
+*.tmp
+
+# Build results
+builds/
+export/
+exports/
+*.zip
+*.apk
+*.exe
+*.x86_64
+*.dmg
+
+# Logs
+*.log
+logs
