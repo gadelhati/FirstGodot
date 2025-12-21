@@ -13,7 +13,7 @@ var damage_dealer: DamageDealerComponent
 @export var destroy_on_hit: bool = true
 @export var can_hit_multiple: bool = false
 
-# Referências visuais (opcional)
+# Referências visuais
 @export var sprite: Sprite2D
 @export var trail: Line2D
 
