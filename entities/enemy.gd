@@ -64,7 +64,7 @@ func _connect_signals():
 	health_component.death.connect(_on_death)
 	contact_damage_component.damage_dealt.connect(_on_contact_damage_dealt)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if enable_contact_damage:
 		# Verifica colisões de slide (quando se move)
 		_check_slide_collisions()

@@ -19,25 +19,23 @@ var damage_dealer: DamageDealerComponent
 
 func setup(dir: Vector2, spd: float, max_dist: float):
 	_initialize_components(dir, spd, max_dist)
-	_connect_signals()
 	_apply_visual_rotation()
+	# Conecta signals apenas se ainda não estiverem conectados
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
+	if not area_entered.is_connected(_on_area_entered):
+		area_entered.connect(_on_area_entered)
 
 func _initialize_components(dir: Vector2, spd: float, max_dist: float):
 	projectile_component = ProjectileComponent.new(dir, spd, max_dist)
 	damage_dealer = DamageDealerComponent.new(damage, can_hit_multiple)
-
-func _connect_signals():
 	damage_dealer.damage_dealt.connect(_on_damage_dealt)
-	
-	# Conecta sinais de colisão
-	body_entered.connect(_on_body_entered)
-	area_entered.connect(_on_area_entered)
 
 func _apply_visual_rotation():
 	rotation = projectile_component.get_rotation()
 
-func _physics_process(delta):
-	_handle_movement(delta)
+func _physics_process(_delta):
+	_handle_movement(_delta)
 	_check_destruction()
 
 func _handle_movement(delta: float):
@@ -56,7 +54,7 @@ func _update_trail():
 
 func _check_destruction():
 	if projectile_component.should_destroy():
-		projectile_component.max_distance_reached.emit()
+		_destroy_projectile()
 
 # Callbacks de colisão
 func _on_body_entered(body: Node2D):
@@ -66,15 +64,15 @@ func _on_body_entered(body: Node2D):
 		_destroy_projectile()
 
 func _on_area_entered(area: Area2D):
-	# Colisão com paredes ou outras áreas
-	_destroy_projectile()
+	if destroy_on_hit:
+		_destroy_projectile()
 
 func _on_max_distance_reached():
 	_destroy_projectile()
 
 func _on_damage_dealt(target: Node, damage_value: float):
 	# Feedback visual ou sonoro pode ser adicionado aqui
-	projectile_component.target_hit.emit(target)
+	pass
 
 func _destroy_projectile():
 	# Efeito de destruição pode ser adicionado aqui
