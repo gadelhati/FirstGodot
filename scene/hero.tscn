@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://cq27x2b3tefy5"]
 
 [ext_resource type="Script" uid="uid://bw17ftyga7l2r" path="res://entities/hero.gd" id="1_xpv8o"]
-[ext_resource type="Texture2D" uid="uid://djvmcr0nyfm0j" path="res://icon.svg" id="2_u1ipw"]
-[ext_resource type="PackedScene" uid="uid://3stbmev5qth1" path="res://bullet.tscn" id="2_xpv8o"]
+[ext_resource type="Texture2D" uid="uid://djvmcr0nyfm0j" path="res://assets/icon.svg" id="2_u1ipw"]
+[ext_resource type="PackedScene" uid="uid://3stbmev5qth1" path="res://scene/bullet.tscn" id="2_xpv8o"]
 [ext_resource type="Script" uid="uid://b71wb5ionwtjq" path="res://UI/health_bar.gd" id="4_iyggp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xpv8o"]
@@ -11,8 +11,14 @@ size = Vector2(127, 126)
 [node name="Hero" type="CharacterBody2D" node_paths=PackedStringArray("health_bar")]
 collision_mask = 5
 script = ExtResource("1_xpv8o")
+speed = null
+max_hp = null
 health_bar = NodePath("HealthBar")
+bullet_speed = null
+max_bullet_distance = null
+fire_rate = null
 bullet_scene = ExtResource("2_xpv8o")
+auto_find_controls = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_u1ipw")

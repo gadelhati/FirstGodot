@@ -63,14 +63,14 @@ func _on_body_entered(body: Node2D):
 	if damage_applied and destroy_on_hit:
 		_destroy_projectile()
 
-func _on_area_entered(area: Area2D):
+func _on_area_entered(_area: Area2D):
 	if destroy_on_hit:
 		_destroy_projectile()
 
 func _on_max_distance_reached():
 	_destroy_projectile()
 
-func _on_damage_dealt(target: Node, damage_value: float):
+func _on_damage_dealt(_target: Node, damage_value: float):
 	# Feedback visual ou sonoro pode ser adicionado aqui
 	pass
 

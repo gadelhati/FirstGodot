@@ -1,31 +1,21 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/movement_component.gd)
+# components/movement_component.gd (ATUALIZADO)
 # ============================================
 class_name MovementComponent
 extends RefCounted
 
 var speed: float
-var input_enabled: bool = true
+var input_manager: InputManagerComponent
 
 func _init(p_speed: float):
 	speed = p_speed
+	input_manager = InputManagerComponent.new()
+
+func set_virtual_controls(joystick, button):
+	input_manager.set_virtual_controls(joystick, button)
 
 func get_input_vector() -> Vector2:
-	if not input_enabled:
-		return Vector2.ZERO
-	
-	var input_vector = Vector2.ZERO
-	
-	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
-		input_vector.x += 1
-	if Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A):
-		input_vector.x -= 1
-	if Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_S):
-		input_vector.y += 1
-	if Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W):
-		input_vector.y -= 1
-	
-	return input_vector.normalized()
+	return input_manager.get_movement_input()
 
 func calculate_velocity(input_vector: Vector2) -> Vector2:
 	return input_vector * speed
@@ -34,7 +24,10 @@ func set_speed(new_speed: float):
 	speed = max(0, new_speed)
 
 func disable_input():
-	input_enabled = false
+	input_manager.set_input_enabled(false)
 
 func enable_input():
-	input_enabled = true
+	input_manager.set_input_enabled(true)
+
+func get_input_manager() -> InputManagerComponent:
+	return input_manager

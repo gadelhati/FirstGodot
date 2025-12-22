@@ -1,5 +1,5 @@
 # ============================================
-# ENTIDADES (Entities/hero.gd)
+# entities/hero.gd (ATUALIZADO)
 # ============================================
 class_name Hero
 extends CharacterBody2D
@@ -20,15 +20,64 @@ var damage_feedback: DamageFeedbackComponent
 
 @export_group("Weapon")
 @export var bullet_speed: float = 500.0
-@export var max_bullet_distance: float = 500.0
+@export var max_bullet_distance: float = 1000.0
 @export var fire_rate: float = 0.2
 @export var bullet_scene: PackedScene
 @export var spawn_point: Node2D
 
+@export_group("Mobile Controls")
+@export var auto_find_controls: bool = true
+
+var virtual_joystick: VirtualJoystick
+var fire_button: FireButton
+
 func _ready():
+	if auto_find_controls:
+		_find_virtual_controls()
+	
 	_initialize_components()
 	_connect_signals()
+	_setup_mobile_controls()
 
+func _find_virtual_controls():
+	# Busca na árvore de nós
+	var root = get_tree().root
+	
+	# Procura VirtualJoystick pelo script
+	virtual_joystick = _find_node_with_script(root, "virtual_joystick.gd")
+	
+	# Procura FireButton pelo script
+	fire_button = _find_node_with_script(root, "fire_button.gd")
+	
+	# DEBUG
+	print("=== MOBILE CONTROLS DEBUG ===")
+	if virtual_joystick:
+		print("✅ Joystick encontrado:", virtual_joystick.get_path())
+		print("   Joystick tipo:", virtual_joystick.get_class())
+		virtual_joystick.visible = true
+	else:
+		print("❌ Joystick NÃO encontrado!")
+	
+	if fire_button:
+		print("✅ Fire Button encontrado:", fire_button.get_path())
+		fire_button.visible = true
+	else:
+		print("❌ Fire Button NÃO encontrado!")
+
+func _find_node_with_script(node: Node, script_name: String):
+	# Verifica se o nó tem o script
+	var node_script = node.get_script()
+	if node_script and node_script.resource_path.ends_with(script_name):
+		return node
+	
+	# Busca recursivamente nos filhos
+	for child in node.get_children():
+		var result = _find_node_with_script(child, script_name)
+		if result:
+			return result
+	
+	return null
+			
 func _initialize_components():
 	health_component = HealthComponent.new(max_hp)
 	movement_component = MovementComponent.new(speed)
@@ -45,13 +94,17 @@ func _initialize_components():
 	if health_bar:
 		health_bar.initialize(health_component)
 
+func _setup_mobile_controls():
+	if virtual_joystick and fire_button:
+		movement_component.set_virtual_controls(virtual_joystick, fire_button)
+
 func _connect_signals():
 	health_component.damage_taken.connect(_on_damage_taken)
 	health_component.death.connect(_on_death)
 	health_component.health_changed.connect(_on_health_changed)
 
-func _physics_process(delta):
-	_handle_movement(delta)
+func _physics_process(_delta):
+	_handle_movement(_delta)
 	_handle_shooting()
 
 func _handle_movement(_delta: float):
@@ -60,9 +113,11 @@ func _handle_movement(_delta: float):
 	move_and_slide()
 
 func _handle_shooting():
-	if Input.is_action_pressed("shoot"):
+	var input_manager = movement_component.get_input_manager()
+	
+	if input_manager.get_shoot_input():
 		var origin_pos = weapon_component.get_spawn_position()
-		var target_pos = get_global_mouse_position()
+		var target_pos = input_manager.get_aim_position(global_position)
 		weapon_component.try_shoot(origin_pos, target_pos, get_parent())
 
 # API Pública
@@ -88,6 +143,5 @@ func _on_health_changed(_current: float, _maximum: float):
 func _on_death():
 	print("Game Over!")
 	movement_component.disable_input()
-	# Aqui você pode adicionar animação de morte antes de recarregar
 	await get_tree().create_timer(1.0).timeout
 	get_tree().reload_current_scene()
