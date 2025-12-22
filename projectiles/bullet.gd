@@ -7,19 +7,18 @@ extends Area2D
 var projectile: ProjectileComponent
 var dealer: DamageDealerComponent
 
-@export var damage: float = 25.0
 @export var destroy_on_hit: bool = true
 @export var pierce: bool = false
 @export var sprite: Sprite2D
 @export var trail: Line2D
 
-func setup(dir: Vector2, speed: float, max_range: float):
-	_init_components(dir, speed, max_range)
+func setup(dir: Vector2, speed: float, range: float, damage: float):
+	_init_components(dir, speed, range, damage)
 	rotation = projectile.get_rotation()
 	_connect_signals()
 
-func _init_components(dir: Vector2, speed: float, max_range: float):
-	projectile = ProjectileComponent.new(dir, speed, max_range)
+func _init_components(dir: Vector2, speed: float, range: float, damage: float):
+	projectile = ProjectileComponent.new(dir, speed, range)
 	dealer = DamageDealerComponent.new(damage, pierce)
 
 func _connect_signals():
@@ -60,9 +59,3 @@ func get_damage() -> float:
 
 func set_damage(value: float):
 	dealer.damage = value
-
-func get_distance() -> float:
-	return projectile.distance
-
-func get_direction() -> Vector2:
-	return projectile.direction

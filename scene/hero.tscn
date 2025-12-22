@@ -1,24 +1,24 @@
-[gd_scene load_steps=6 format=3 uid="uid://cq27x2b3tefy5"]
+[gd_scene load_steps=7 format=3 uid="uid://cq27x2b3tefy5"]
 
 [ext_resource type="Script" uid="uid://bw17ftyga7l2r" path="res://entities/hero.gd" id="1_xpv8o"]
 [ext_resource type="Texture2D" uid="uid://djvmcr0nyfm0j" path="res://assets/icon.svg" id="2_u1ipw"]
 [ext_resource type="PackedScene" uid="uid://3stbmev5qth1" path="res://scene/bullet.tscn" id="2_xpv8o"]
 [ext_resource type="Script" uid="uid://b71wb5ionwtjq" path="res://UI/health_bar.gd" id="4_iyggp"]
+[ext_resource type="Script" uid="uid://b8oaah41u3he8" path="res://UI/ammo_bar.gd" id="5_mccdw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xpv8o"]
 size = Vector2(127, 126)
 
-[node name="Hero" type="CharacterBody2D" node_paths=PackedStringArray("health_bar")]
+[node name="Hero" type="CharacterBody2D" node_paths=PackedStringArray("health_bar", "ammo_bar")]
 collision_mask = 5
 script = ExtResource("1_xpv8o")
 speed = null
 max_hp = null
-health_bar = NodePath("HealthBar")
 bullet_speed = null
-max_bullet_distance = null
 fire_rate = null
 bullet_scene = ExtResource("2_xpv8o")
-auto_find_controls = null
+health_bar = NodePath("HealthBar")
+ammo_bar = NodePath("AmmoBar")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_u1ipw")
@@ -33,3 +33,10 @@ offset_top = -100.0
 offset_right = 66.0
 offset_bottom = -73.0
 script = ExtResource("4_iyggp")
+
+[node name="AmmoBar" type="ProgressBar" parent="."]
+offset_left = -63.0
+offset_top = 71.0
+offset_right = 65.0
+offset_bottom = 98.0
+script = ExtResource("5_mccdw")
