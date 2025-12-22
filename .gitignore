@@ -2,6 +2,7 @@
 .godot/
 /assets/
 /android/
+/build/
 
 # Temporary files
 *.tmp

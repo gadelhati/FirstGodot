@@ -7,9 +7,13 @@
 [node name="Main" type="Node2D"]
 
 [node name="Enemy" parent="." instance=ExtResource("3_21bcp")]
-position = Vector2(522, 184)
+position = Vector2(897, 319)
 
 [node name="Hero" parent="." instance=ExtResource("2_ohhpf")]
-position = Vector2(188, 174)
+position = Vector2(383, 321)
+speed = 300.0
+max_hp = 100.0
+bullet_speed = 500.0
+fire_rate = 0.2
 
 [node name="VirtualControls" parent="." instance=ExtResource("3_wp4xf")]

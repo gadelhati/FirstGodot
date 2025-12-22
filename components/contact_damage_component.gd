@@ -4,51 +4,30 @@
 class_name ContactDamageComponent
 extends RefCounted
 
-signal damage_dealt(target: Node, damage: float)
-signal cooldown_started(target: Node)
-signal cooldown_finished(target: Node)
-
-var owner_node: Node
+var owner: Node
 var damage: float
-var cooldown_duration: float
-var targets_on_cooldown: Dictionary = {}
+var cooldown: float
+var _cooldowns: Dictionary = {}  # {Node: bool}
 
 func _init(p_owner: Node, p_damage: float, p_cooldown: float = 1.0):
-	owner_node = p_owner
+	owner = p_owner
 	damage = p_damage
-	cooldown_duration = p_cooldown
+	cooldown = p_cooldown
 
-func try_deal_contact_damage(target: Node) -> bool:
-	if not target.has_method("take_damage"):
-		return false
-	
-	if target == owner_node:
-		return false
-	
-	if is_on_cooldown(target):
+func try_damage(target: Node) -> bool:
+	if not _can_damage(target):
 		return false
 	
 	target.take_damage(damage)
-	damage_dealt.emit(target, damage)
 	_start_cooldown(target)
 	return true
 
-func is_on_cooldown(target: Node) -> bool:
-	return target in targets_on_cooldown
+func _can_damage(target: Node) -> bool:
+	return target != owner and \
+		   target.has_method("take_damage") and \
+		   not _cooldowns.get(target, false)
 
 func _start_cooldown(target: Node):
-	cooldown_started.emit(target)
-	var timer = owner_node.get_tree().create_timer(cooldown_duration)
-	targets_on_cooldown[target] = timer
-	await timer.timeout
-	targets_on_cooldown.erase(target)
-	cooldown_finished.emit(target)
-
-func set_damage(new_damage: float):
-	damage = new_damage
-
-func set_cooldown(new_cooldown: float):
-	cooldown_duration = new_cooldown
-
-func clear_cooldowns():
-	targets_on_cooldown.clear()
+	_cooldowns[target] = true
+	await owner.get_tree().create_timer(cooldown).timeout
+	_cooldowns.erase(target)

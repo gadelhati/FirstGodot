@@ -5,8 +5,6 @@ class_name HealthComponent
 extends RefCounted
 
 signal health_changed(current: float, maximum: float)
-signal damage_taken(damage: float, current: float)
-signal healed(amount: float, current: float)
 signal death()
 
 var max_hp: float
@@ -16,15 +14,11 @@ func _init(p_max_hp: float):
 	max_hp = p_max_hp
 	current_hp = max_hp
 
-func take_damage(damage: float):
+func take_damage(amount: float):
 	if not is_alive():
 		return
 	
-	var actual_damage = min(damage, current_hp)
-	current_hp -= actual_damage
-	current_hp = clamp(current_hp, 0, max_hp)
-	
-	damage_taken.emit(actual_damage, current_hp)
+	current_hp = clamp(current_hp - amount, 0, max_hp)
 	health_changed.emit(current_hp, max_hp)
 	
 	if current_hp <= 0:
@@ -34,13 +28,8 @@ func heal(amount: float):
 	if not is_alive():
 		return
 	
-	var old_hp = current_hp
-	current_hp = min(current_hp + amount, max_hp)
-	var actual_heal = current_hp - old_hp
-	
-	if actual_heal > 0:
-		healed.emit(actual_heal, current_hp)
-		health_changed.emit(current_hp, max_hp)
+	current_hp = clamp(current_hp + amount, 0, max_hp)
+	health_changed.emit(current_hp, max_hp)
 
 func get_current_hp() -> float:
 	return current_hp

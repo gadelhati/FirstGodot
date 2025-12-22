@@ -4,46 +4,31 @@
 class_name HealthBar
 extends ProgressBar
 
-@export var show_hp_text: bool = true
-@export var use_color_transition: bool = true
+@export var colored: bool = true
 
-var health_component: HealthComponent
+var health: HealthComponent
 
-func _ready():
-	show_percentage = show_hp_text
-
-func initialize(p_health_component: HealthComponent):
-	health_component = p_health_component
-	
-	# Conecta aos sinais do componente
-	health_component.health_changed.connect(_on_health_changed)
-	
-	# Atualiza valores iniciais
-	_on_health_changed(
-		health_component.get_current_hp(),
-		health_component.get_max_hp()
-	)
+func initialize(health_component: HealthComponent):
+	health = health_component
+	health.health_changed.connect(_on_health_changed)
+	_update(health.get_current_hp(), health.get_max_hp())
 
 func _on_health_changed(current: float, maximum: float):
+	_update(current, maximum)
+
+func _update(current: float, maximum: float):
 	max_value = maximum
 	value = current
 	
-	if use_color_transition:
-		update_color()
+	if colored:
+		_update_color()
 
-func update_color():
-	var percentage = health_component.get_hp_percentage()
+func _update_color():
+	var percent = health.get_hp_percentage()
 	
-	if percentage > 60:
+	if percent > 60:
 		modulate = Color.GREEN
-	elif percentage > 30:
+	elif percent > 30:
 		modulate = Color.YELLOW
 	else:
 		modulate = Color.RED
-
-# API Pública (para uso manual se necessário)
-func set_hp(current: float, maximum: float):
-	max_value = maximum
-	value = current
-	if use_color_transition:
-		update_color()

@@ -4,21 +4,20 @@
 class_name DamageFeedbackComponent
 extends RefCounted
 
-var target_node: Node2D
-var default_color: Color
+var target: Node2D
 var damage_color: Color
-var flash_duration: float
+var duration: float
 
-func _init(p_target: Node2D, p_damage_color: Color = Color.RED, p_duration: float = 0.1):
-	target_node = p_target
-	default_color = target_node.modulate
-	damage_color = p_damage_color
-	flash_duration = p_duration
+func _init(p_target: Node2D, color: Color = Color.RED, time: float = 0.1):
+	target = p_target
+	damage_color = color
+	duration = time
 
-func play_feedback():
-	if target_node == null:
+func play():
+	if not target:
 		return
 	
-	target_node.modulate = damage_color
-	await target_node.get_tree().create_timer(flash_duration).timeout
-	target_node.modulate = default_color
+	var original = target.modulate
+	target.modulate = damage_color
+	await target.get_tree().create_timer(duration).timeout
+	target.modulate = original

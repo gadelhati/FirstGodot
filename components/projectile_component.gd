@@ -6,25 +6,24 @@ extends RefCounted
 
 var direction: Vector2
 var speed: float
-var max_distance: float
-var traveled_distance: float = 0.0
+var max_range: float
+var distance: float = 0.0
 
-func _init(p_direction: Vector2, p_speed: float, p_max_distance: float):
-	direction = p_direction.normalized()
-	speed = p_speed
-	max_distance = p_max_distance
-	traveled_distance = 0.0
+func _init(dir: Vector2, spd: float, rng: float):
+	direction = dir.normalized()
+	speed = spd
+	max_range = rng
 
 func move(delta: float) -> Vector2:
 	var movement = direction * speed * delta
-	traveled_distance += movement.length()
+	distance += movement.length()
 	return movement
 
-func should_destroy() -> bool:
-	return traveled_distance >= max_distance
+func is_expired() -> bool:
+	return distance >= max_range
 
 func get_rotation() -> float:
 	return direction.angle()
 
-func get_traveled_percentage() -> float:
-	return (traveled_distance / max_distance) * 100.0 if max_distance > 0 else 100.0
+func get_progress() -> float:
+	return (distance / max_range) * 100.0 if max_range > 0 else 100.0
