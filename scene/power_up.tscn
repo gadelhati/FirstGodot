@@ -1,12 +1,58 @@
-[gd_scene load_steps=13 format=3 uid="uid://beda2cmi52vwo"]
+[gd_scene load_steps=16 format=3 uid="uid://beda2cmi52vwo"]
 
 [ext_resource type="Script" uid="uid://i1tqjvchcpob" path="res://entities/weapon_pickup.gd" id="1_iilmc"]
 [ext_resource type="Script" uid="uid://blr50hl3kdyfr" path="res://entities/power_up.gd" id="1_w4bl2"]
-[ext_resource type="Texture2D" uid="uid://djvmcr0nyfm0j" path="res://assets/icon.svg" id="1_y587k"]
-[ext_resource type="Texture2D" uid="uid://iquv0pt6bjon" path="res://assets/controls/button_arrow_up.png" id="3_8vdjg"]
-[ext_resource type="Texture2D" uid="uid://c6wq1lss8o4wd" path="res://assets/controls/button_arrow_right.png" id="4_w4bl2"]
-[ext_resource type="Texture2D" uid="uid://crets7tiur6jx" path="res://assets/controls/button_arrow_left.png" id="5_enxc5"]
-[ext_resource type="Texture2D" uid="uid://dhl0batvk86w6" path="res://assets/controls/button_arrow_down.png" id="6_8fblj"]
+[ext_resource type="Texture2D" uid="uid://j5rxyq4spe8f" path="res://assets/yum watermelom.png" id="2_xeq78"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xeq78"]
+atlas = ExtResource("2_xeq78")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4pv0q"]
+atlas = ExtResource("2_xeq78")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_17tns"]
+atlas = ExtResource("2_xeq78")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8vdjg"]
+atlas = ExtResource("2_xeq78")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w4bl2"]
+atlas = ExtResource("2_xeq78")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enxc5"]
+atlas = ExtResource("2_xeq78")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8fblj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xeq78")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4pv0q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_17tns")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8vdjg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w4bl2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enxc5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y587k"]
 size = Vector2(42, 42)
@@ -27,10 +73,9 @@ collision_mask = 5
 script = ExtResource("1_w4bl2")
 respawn_time = 10.0
 
-[node name="Sprite2D" type="Sprite2D" parent="HealthPack"]
-position = Vector2(1, 1)
-scale = Vector2(0.328125, 0.328125)
-texture = ExtResource("1_y587k")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthPack"]
+sprite_frames = SubResource("SpriteFrames_8fblj")
+autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HealthPack"]
 position = Vector2(1, 1)
@@ -47,7 +92,6 @@ respawn_time = 15.0
 [node name="Sprite2D" type="Sprite2D" parent="AmmoBox"]
 position = Vector2(-1.9073486e-06, 0.5000019)
 scale = Vector2(0.15625, 0.16406249)
-texture = ExtResource("3_8vdjg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AmmoBox"]
 shape = SubResource("RectangleShape2D_7vaii")
@@ -58,12 +102,10 @@ collision_mask = 5
 script = ExtResource("1_iilmc")
 type = 2
 value = 1.0
-one_time_only = false
 
 [node name="Sprite2D" type="Sprite2D" parent="WeaponPickup_Shotgun"]
 position = Vector2(1.9073486e-06, 0)
 scale = Vector2(0.15625, 0.1612903)
-texture = ExtResource("4_w4bl2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponPickup_Shotgun"]
 shape = SubResource("RectangleShape2D_f0ihm")
@@ -79,7 +121,6 @@ duration = 5.0
 [node name="Sprite2D" type="Sprite2D" parent="SpeedBoost"]
 position = Vector2(0.5, 1.9073486e-06)
 scale = Vector2(0.16406249, 0.15625)
-texture = ExtResource("5_enxc5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpeedBoost"]
 shape = SubResource("RectangleShape2D_ft6t2")
@@ -95,7 +136,6 @@ duration = 10.0
 [node name="Sprite2D" type="Sprite2D" parent="DamageBoost"]
 position = Vector2(4.7683716e-07, 0)
 scale = Vector2(0.15625, 0.16129032)
-texture = ExtResource("6_8fblj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageBoost"]
 shape = SubResource("RectangleShape2D_6d1ro")
