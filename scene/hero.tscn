@@ -12,10 +12,7 @@ size = Vector2(127, 126)
 [node name="Hero" type="CharacterBody2D" node_paths=PackedStringArray("health_bar", "ammo_bar")]
 collision_mask = 5
 script = ExtResource("1_xpv8o")
-speed = null
 max_hp = null
-bullet_speed = null
-fire_rate = null
 bullet_scene = ExtResource("2_xpv8o")
 health_bar = NodePath("HealthBar")
 ammo_bar = NodePath("AmmoBar")
@@ -40,3 +37,6 @@ offset_top = 71.0
 offset_right = 65.0
 offset_bottom = 98.0
 script = ExtResource("5_mccdw")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
