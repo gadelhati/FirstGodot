@@ -74,6 +74,7 @@ script = ExtResource("1_w4bl2")
 respawn_time = 10.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthPack"]
+scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_8fblj")
 autoplay = "default"
 
