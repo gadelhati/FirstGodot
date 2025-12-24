@@ -1,5 +1,5 @@
 # ============================================
-# UI (UI/health_bar.gd)
+# UI/health_bar.gd
 # ============================================
 class_name HealthBar
 extends ProgressBar
@@ -9,8 +9,16 @@ extends ProgressBar
 var health: HealthComponent
 
 func initialize(health_component: HealthComponent):
+	# Desconecta signal anterior se existir
+	if health and health.health_changed.is_connected(_on_health_changed):
+		health.health_changed.disconnect(_on_health_changed)
+	
 	health = health_component
-	health.health_changed.connect(_on_health_changed)
+	
+	# Conecta novo signal
+	if not health.health_changed.is_connected(_on_health_changed):
+		health.health_changed.connect(_on_health_changed)
+	
 	_update(health.get_current_hp(), health.get_max_hp())
 
 func _on_health_changed(current: float, maximum: float):
@@ -24,6 +32,9 @@ func _update(current: float, maximum: float):
 		_update_color()
 
 func _update_color():
+	if not health:
+		return
+	
 	var percent = health.get_hp_percentage()
 	
 	if percent > 60:

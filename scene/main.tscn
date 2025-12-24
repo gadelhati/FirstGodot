@@ -1,16 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://bh3dawwo2q41l"]
+[gd_scene load_steps=5 format=3 uid="uid://bh3dawwo2q41l"]
 
 [ext_resource type="PackedScene" uid="uid://cq27x2b3tefy5" path="res://scene/hero.tscn" id="2_ohhpf"]
 [ext_resource type="PackedScene" uid="uid://bjtp87mr2e030" path="res://scene/enemy.tscn" id="3_21bcp"]
 [ext_resource type="PackedScene" uid="uid://dy7y5m8e3k8w2" path="res://scene/virtual_controls.tscn" id="3_wp4xf"]
+[ext_resource type="PackedScene" uid="uid://beda2cmi52vwo" path="res://scene/power_up.tscn" id="4_brvut"]
 
 [node name="Main" type="Node2D"]
 
 [node name="Enemy" parent="." instance=ExtResource("3_21bcp")]
 position = Vector2(897, 319)
+max_hp = 100.0
+contact_damage = 10.0
+damage_cooldown = 1.0
+contact_radius = 75.0
+enable_contact = true
 
 [node name="Hero" parent="." instance=ExtResource("2_ohhpf")]
 position = Vector2(383, 321)
-bullet_range = null
+max_hp = 100.0
 
 [node name="VirtualControls" parent="." instance=ExtResource("3_wp4xf")]
+
+[node name="PowerUps" parent="." instance=ExtResource("4_brvut")]
+position = Vector2(673, 323)

@@ -29,8 +29,16 @@ func _create_label():
 	label.offset_bottom = 0
 
 func initialize(ammo_component: AmmoComponent):
+	# Desconecta signal anterior se existir
+	if ammo and ammo.ammo_changed.is_connected(_on_ammo_changed):
+		ammo.ammo_changed.disconnect(_on_ammo_changed)
+	
 	ammo = ammo_component
-	ammo.ammo_changed.connect(_on_ammo_changed)
+	
+	# Conecta novo signal
+	if not ammo.ammo_changed.is_connected(_on_ammo_changed):
+		ammo.ammo_changed.connect(_on_ammo_changed)
+	
 	_update(ammo.get_current(), ammo.get_max())
 
 func _on_ammo_changed(current: int, maximum: int):
@@ -50,6 +58,9 @@ func _update(current: int, maximum: int):
 		_update_color()
 
 func _update_color():
+	if not ammo:
+		return
+	
 	var percent = ammo.get_percentage()
 	
 	if percent > 60:

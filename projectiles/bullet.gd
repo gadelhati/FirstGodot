@@ -1,5 +1,5 @@
 # ============================================
-# PROJÉTEIS (projectiles/bullet.gd)
+# projectiles/bullet.gd
 # ============================================
 class_name Bullet
 extends Area2D
@@ -12,13 +12,13 @@ var dealer: DamageDealerComponent
 @export var sprite: Sprite2D
 @export var trail: Line2D
 
-func setup(dir: Vector2, speed: float, range: float, damage: float):
-	_init_components(dir, speed, range, damage)
+func setup(dir: Vector2, speed: float, max_range: float, damage: float):
+	_init_components(dir, speed, max_range, damage)
 	rotation = projectile.get_rotation()
 	_connect_signals()
 
-func _init_components(dir: Vector2, speed: float, range: float, damage: float):
-	projectile = ProjectileComponent.new(dir, speed, range)
+func _init_components(dir: Vector2, speed: float, max_range: float, damage: float):
+	projectile = ProjectileComponent.new(dir, speed, max_range)
 	dealer = DamageDealerComponent.new(damage, pierce)
 
 func _connect_signals():

@@ -10,7 +10,7 @@ signal shot_failed()  # Sem munição
 var bullet_scene: PackedScene
 var damage: float
 var speed: float
-var range: float
+var max_range: float
 var fire_rate: float
 var ammo_cost: int
 var spawn: Node2D
@@ -30,7 +30,7 @@ func _init(
 	bullet_scene = scene
 	damage = dmg
 	speed = spd
-	range = rng
+	max_range = rng
 	fire_rate = rate
 	spawn = spawn_node
 	ammo = p_ammo
@@ -77,7 +77,7 @@ func _spawn_bullet(origin: Vector2, direction: Vector2, parent: Node):
 	var bullet = bullet_scene.instantiate()
 	parent.add_child(bullet)
 	bullet.global_position = spawn_pos
-	bullet.setup(direction, speed, range, damage)
+	bullet.setup(direction, speed, max_range, damage)
 
 func _start_cooldown(node: Node):
 	await node.get_tree().create_timer(fire_rate).timeout
