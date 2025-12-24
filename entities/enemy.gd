@@ -171,7 +171,7 @@ func _check_contacts():
 		contact.try_damage(body)
 
 func _update_ai(delta):
-	match ai_state.get_state():
+	match ai_state.current():
 		AIStateComponent.State.IDLE:
 			_ai_idle(delta)
 		AIStateComponent.State.PATROL:
@@ -181,30 +181,26 @@ func _update_ai(delta):
 		AIStateComponent.State.ATTACK:
 			_ai_attack(delta)
 
-func _ai_idle(delta):
+func _ai_idle(_delta):
 	velocity = Vector2.ZERO
-	
-	# Verifica se vê o player
 	if chase.can_see_target():
-		ai_state.change_state(AIStateComponent.State.CHASE)
+		ai_state.change(AIStateComponent.State.CHASE)
 
-func _ai_patrol(delta):
-	velocity = patrol.update(delta)
+func _ai_patrol(_delta):
+	velocity = patrol.update(_delta)
 	move_and_slide()
-	
-	# Verifica se vê o player
 	if chase.can_see_target():
-		ai_state.change_state(AIStateComponent.State.CHASE)
+		ai_state.change(AIStateComponent.State.CHASE)
 
 func _ai_chase(delta):
 	# Verifica se perdeu o player
 	if chase.lost_target():
-		ai_state.change_state(AIStateComponent.State.PATROL)
+		ai_state.change(AIStateComponent.State.PATROL)
 		return
 	
 	# Verifica se está em range de ataque
 	if shooter and shooter.is_in_range():
-		ai_state.change_state(AIStateComponent.State.ATTACK)
+		ai_state.change(AIStateComponent.State.ATTACK)
 		return
 	
 	# Persegue
@@ -217,12 +213,12 @@ func _ai_attack(delta):
 	
 	# Verifica se ainda está em range
 	if not shooter.is_in_range():
-		ai_state.change_state(AIStateComponent.State.CHASE)
+		ai_state.change(AIStateComponent.State.CHASE)
 		return
 	
 	# Verifica se perdeu o alvo
 	if chase.lost_target():
-		ai_state.change_state(AIStateComponent.State.PATROL)
+		ai_state.change(AIStateComponent.State.PATROL)
 		return
 	
 	# Atira
@@ -249,74 +245,52 @@ func set_target(new_target: Node2D):
 
 # API Pública - Power-Ups
 func add_ammo(amount: int):
-	print("🔫 Enemy.add_ammo() - Adicionando: ", amount)
 	if ammo:
-		print("   Munição antes: ", ammo.get_current(), "/", ammo.get_max())
 		ammo.reload(amount)
-		print("   Munição depois: ", ammo.get_current(), "/", ammo.get_max())
-	else:
-		print("   ❌ Enemy não tem sistema de munição")
 
-func change_weapon(index: int):
-	print("🔄 Enemy.change_weapon() - Ignorado (enemy não troca de arma)")
-	pass
+func change_weapon(_index: int):
+	pass  # Enemy não troca arma
 
 func add_weapon(weapon_data: WeaponData):
-	print("➕ Enemy.add_weapon() - Arma: ", weapon_data.weapon_name)
-	if weapon and ammo:
-		ammo = AmmoComponent.new(weapon_data.max_ammo, infinite_ammo)
-		weapon = WeaponComponent.new(
-			weapon_data.bullet_scene,
-			weapon_data.damage,
-			weapon_data.bullet_speed,
-			weapon_data.bullet_range,
-			weapon_data.fire_rate,
-			spawn_point if spawn_point else self,
-			ammo,
-			weapon_data.ammo_per_shot
-		)
-		if shooter:
-			shooter.weapon = weapon
-		print("   ✅ Arma substituída")
-	else:
-		print("   ❌ Enemy não tem sistema de armas")
-
-func apply_speed_boost(boost: float, duration: float):
-	print("⚡ Enemy.apply_speed_boost() - Boost: ", boost, " Duração: ", duration, "s")
-	var old_patrol = patrol.speed if patrol else 0
-	var old_chase = chase.speed if chase else 0
+	if not (weapon and ammo):
+		return
 	
+	ammo = AmmoComponent.new(weapon_data.max_ammo, infinite_ammo)
+	weapon = WeaponComponent.new(
+		weapon_data.bullet_scene,
+		weapon_data.damage,
+		weapon_data.bullet_speed,
+		weapon_data.bullet_range,
+		weapon_data.fire_rate,
+		spawn_point if spawn_point else self,
+		ammo,
+		weapon_data.ammo_per_shot
+	)
+	if shooter:
+		shooter.weapon = weapon
+
+func apply_speed_boost(boost: float, time: float):
 	if patrol:
 		patrol.speed += boost
 	if chase:
 		chase.speed += boost
 	
-	print("   Patrol speed: ", old_patrol, " -> ", patrol.speed if patrol else 0)
-	print("   Chase speed: ", old_chase, " -> ", chase.speed if chase else 0)
-	
-	# Remove boost após duração
-	if duration > 0:
-		await get_tree().create_timer(duration).timeout
+	if time > 0:
+		await get_tree().create_timer(time).timeout
 		if patrol:
 			patrol.speed -= boost
 		if chase:
 			chase.speed -= boost
-		print("   ⏰ Speed boost expirou")
 
-func apply_damage_boost(boost: float, duration: float):
-	print("💥 Enemy.apply_damage_boost() - Boost: ", boost, " Duração: ", duration, "s")
-	if weapon:
-		var old_damage = weapon.damage
-		weapon.damage += boost
-		print("   Dano: ", old_damage, " -> ", weapon.damage)
-		
-		# Remove boost após duração
-		if duration > 0:
-			await get_tree().create_timer(duration).timeout
-			weapon.damage -= boost
-			print("   ⏰ Damage boost expirou")
-	else:
-		print("   ❌ Enemy não tem arma")
+func apply_damage_boost(boost: float, time: float):
+	if not weapon:
+		return
+	
+	weapon.damage += boost
+	
+	if time > 0:
+		await get_tree().create_timer(time).timeout
+		weapon.damage -= boost
 
 # Callbacks
 func _on_health_changed(_current: float, _max: float):

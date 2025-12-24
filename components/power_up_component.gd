@@ -1,18 +1,10 @@
 # ============================================
-# components/power_up_component.gd
+# components/power_up_component.gd (REFATORADO)
 # ============================================
 class_name PowerUpComponent
 extends RefCounted
 
-enum Type {
-	HEALTH,
-	AMMO,
-	WEAPON,
-	SPEED,
-	DAMAGE_BOOST
-}
-
-signal applied(target: Node, type: Type)
+enum Type { HEALTH, AMMO, WEAPON, SPEED, DAMAGE_BOOST }
 
 var type: Type
 var value: float
@@ -24,83 +16,24 @@ func _init(p_type: Type, p_value: float, p_duration: float = 0.0):
 	duration = p_duration
 
 func apply(target: Node) -> bool:
-	print("PowerUpComponent.apply() chamado")
-	print("Target: ", target.name)
-	print("Type: ", Type.keys()[type])
+	const METHODS = {
+		Type.HEALTH: "heal",
+		Type.AMMO: "add_ammo",
+		Type.WEAPON: "change_weapon",
+		Type.SPEED: "apply_speed_boost",
+		Type.DAMAGE_BOOST: "apply_damage_boost"
+	}
 	
-	var success = false
+	var method = METHODS.get(type)
+	if not method or not target.has_method(method):
+		return false
 	
 	match type:
-		Type.HEALTH:
-			print("Tentando aplicar HEALTH...")
-			success = _apply_health(target)
-		Type.AMMO:
-			print("Tentando aplicar AMMO...")
-			success = _apply_ammo(target)
+		Type.HEALTH, Type.AMMO:
+			target.call(method, value if type == Type.HEALTH else int(value))
 		Type.WEAPON:
-			print("Tentando aplicar WEAPON...")
-			success = _apply_weapon(target)
-		Type.SPEED:
-			print("Tentando aplicar SPEED...")
-			success = _apply_speed(target)
-		Type.DAMAGE_BOOST:
-			print("Tentando aplicar DAMAGE_BOOST...")
-			success = _apply_damage(target)
+			target.call(method, int(value))
+		Type.SPEED, Type.DAMAGE_BOOST:
+			target.call(method, value, duration)
 	
-	if success:
-		applied.emit(target, type)
-		print("✅ PowerUp aplicado com sucesso!")
-	else:
-		print("❌ PowerUp falhou ao aplicar")
-	
-	return success
-
-func _apply_health(target: Node) -> bool:
-	print("Verificando método 'heal': ", target.has_method("heal"))
-	
-	if not target.has_method("heal"):
-		return false
-	
-	print("Curando ", value, " HP")
-	target.heal(value)
-	return true
-
-func _apply_ammo(target: Node) -> bool:
-	print("Verificando método 'add_ammo': ", target.has_method("add_ammo"))
-	
-	if not target.has_method("add_ammo"):
-		return false
-	
-	print("Adicionando ", int(value), " munição")
-	target.add_ammo(int(value))
-	return true
-
-func _apply_weapon(target: Node) -> bool:
-	print("Verificando método 'add_weapon': ", target.has_method("add_weapon"))
-	
-	if not target.has_method("add_weapon"):
-		return false
-	
-	# Para weapon, value é o índice/tipo
-	target.change_weapon(int(value))
-	return true
-
-func _apply_speed(target: Node) -> bool:
-	print("Verificando método 'apply_speed_boost': ", target.has_method("apply_speed_boost"))
-	
-	if not target.has_method("apply_speed_boost"):
-		return false
-	
-	print("Aplicando speed boost de ", value, " por ", duration, "s")
-	target.apply_speed_boost(value, duration)
-	return true
-
-func _apply_damage(target: Node) -> bool:
-	print("Verificando método 'apply_damage_boost': ", target.has_method("apply_damage_boost"))
-	
-	if not target.has_method("apply_damage_boost"):
-		return false
-	
-	print("Aplicando damage boost de ", value, " por ", duration, "s")
-	target.apply_damage_boost(value, duration)
 	return true

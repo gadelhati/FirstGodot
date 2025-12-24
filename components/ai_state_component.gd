@@ -4,35 +4,27 @@
 class_name AIStateComponent
 extends RefCounted
 
-signal state_changed(old_state: String, new_state: String)
+signal state_changed(old: String, new: String)
 
-enum State {
-	IDLE,
-	PATROL,
-	CHASE,
-	ATTACK,
-	RETREAT
-}
+enum State { IDLE, PATROL, CHASE, ATTACK, RETREAT }
 
-var current_state: State = State.IDLE
+var state: State
 var owner: Node
 
-func _init(p_owner: Node, initial_state: State = State.IDLE):
+func _init(p_owner: Node, initial: State = State.IDLE):
 	owner = p_owner
-	current_state = initial_state
+	state = initial
 
-func change_state(new_state: State):
-	if new_state == current_state:
+func change(new_state: State):
+	if new_state == state:
 		return
 	
-	var old = State.keys()[current_state]
-	current_state = new_state
-	var new = State.keys()[new_state]
-	
-	state_changed.emit(old, new)
+	var old = State.keys()[state]
+	state = new_state
+	state_changed.emit(old, State.keys()[state])
 
-func is_state(state: State) -> bool:
-	return current_state == state
+func is_state(s: State) -> bool:
+	return state == s
 
-func get_state() -> State:
-	return current_state
+func current() -> State:  # ← MUDOU de get() para current()
+	return state

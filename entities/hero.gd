@@ -45,11 +45,10 @@ func _init_components():
 	inventory = InventoryComponent.new(max_weapons)
 	feedback = DamageFeedbackComponent.new(self)
 	
-	# Arma inicial
 	if not starting_weapon:
-		starting_weapon = WeaponData.create_pistol()
+		starting_weapon = WeaponData.pistol()
 	
-	starting_weapon.bullet_scene = bullet_scene
+	starting_weapon.scene = bullet_scene
 	inventory.add_weapon(starting_weapon)
 	_equip_current_weapon()
 	
@@ -66,18 +65,22 @@ func _equip_current_weapon():
 	if not weapon_data:
 		return
 	
-	# Cria novo ammo e weapon
 	ammo = AmmoComponent.new(weapon_data.max_ammo, false)
 	weapon = WeaponComponent.new(
-		weapon_data.bullet_scene,
+		weapon_data.scene,
 		weapon_data.damage + damage_boost,
-		weapon_data.bullet_speed,
-		weapon_data.bullet_range,
-		weapon_data.fire_rate,
+		weapon_data.speed,
+		weapon_data.max_range,
+		weapon_data.rate,
 		spawn_point if spawn_point else self,
 		ammo,
-		weapon_data.ammo_per_shot
+		weapon_data.cost
 	)
+	
+	if ammo_bar:
+		ammo_bar.initialize(ammo)
+	
+	_update_weapon_ui()
 	
 	# Atualiza UI da munição (initialize já cuida da reconexão)
 	if ammo_bar:
@@ -173,56 +176,33 @@ func _update_weapon_ui():
 
 # API Pública - Power-Ups
 func heal(amount: float):
-	print("🏥 Hero.heal() - Curando: ", amount)
-	print("   HP antes: ", health.get_current_hp(), "/", health.get_max_hp())
 	health.heal(amount)
-	print("   HP depois: ", health.get_current_hp(), "/", health.get_max_hp())
 
 func add_ammo(amount: int):
-	print("🔫 Hero.add_ammo() - Adicionando: ", amount)
 	if ammo:
-		print("   Munição antes: ", ammo.get_current(), "/", ammo.get_max())
 		ammo.reload(amount)
-		print("   Munição depois: ", ammo.get_current(), "/", ammo.get_max())
-	else:
-		print("   ❌ Ammo component não existe!")
 
 func change_weapon(index: int):
-	print("🔄 Hero.change_weapon() - Index: ", index)
 	if inventory.change_weapon(index):
 		_equip_current_weapon()
-		print("   ✅ Arma trocada")
-	else:
-		print("   ❌ Índice inválido")
 
 func add_weapon(weapon_data: WeaponData):
-	print("➕ Hero.add_weapon() - Arma: ", weapon_data.weapon_name)
-	weapon_data.bullet_scene = bullet_scene
+	weapon_data.scene = bullet_scene
 	inventory.add_weapon(weapon_data)
-	# Equipa automaticamente se for a primeira arma
 	if inventory.get_weapon_count() == 1:
 		_equip_current_weapon()
-	print("   ✅ Arma adicionada. Total: ", inventory.get_weapon_count())
 
-func apply_speed_boost(boost: float, duration: float):
-	print("⚡ Hero.apply_speed_boost() - Boost: ", boost, " Duração: ", duration, "s")
-	print("   Velocidade antes: ", movement.speed)
+func apply_speed_boost(boost: float, time: float):
 	speed_boost = boost
-	speed_boost_timer = duration
+	speed_boost_timer = time
 	movement.set_speed(base_speed + boost)
-	print("   Velocidade depois: ", movement.speed)
 
-func apply_damage_boost(boost: float, duration: float):
-	print("💥 Hero.apply_damage_boost() - Boost: ", boost, " Duração: ", duration, "s")
+func apply_damage_boost(boost: float, time: float):
 	damage_boost = boost
-	damage_boost_timer = duration
-	# Atualiza dano da arma atual
+	damage_boost_timer = time
 	if weapon:
 		var weapon_data = inventory.get_current_weapon()
-		var old_damage = weapon.damage
 		weapon.damage = weapon_data.damage + damage_boost
-		print("   Dano antes: ", old_damage)
-		print("   Dano depois: ", weapon.damage)
 
 # Outros métodos
 func take_damage(amount: float):
