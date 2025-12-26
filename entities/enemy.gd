@@ -33,12 +33,12 @@ var ammo: AmmoComponent
 @export var initial_state: AIStateComponent.State = AIStateComponent.State.PATROL
 
 @export_group("Patrol")
-@export var patrol_speed: float = 100.0
+@export var patrol_speed: float = 85.0
 @export var patrol_points: Array[Vector2] = []
 @export var patrol_loop: bool = true
 
 @export_group("Chase")
-@export var chase_speed: float = 150.0
+@export var chase_speed: float = 95.0
 @export var detection_range: float = 300.0
 @export var lose_range: float = 500.0
 @export var min_chase_distance: float = 100.0
@@ -46,7 +46,7 @@ var ammo: AmmoComponent
 @export_group("Weapon")
 @export var can_shoot: bool = true
 @export var weapon_damage: float = 15.0
-@export var bullet_speed: float = 400.0
+@export var bullet_speed: float = 150.0
 @export var bullet_range: float = 800.0
 @export var fire_rate: float = 1.0
 @export var shoot_range: float = 400.0
