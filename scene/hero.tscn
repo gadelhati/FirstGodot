@@ -34,7 +34,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_heiwi")
 }],
 "loop": true,
-"name": &"default",
+"name": &"walk",
 "speed": 5.0
 }]
 
@@ -51,17 +51,19 @@ position = Vector2(0.5, 0)
 shape = SubResource("CircleShape2D_mccdw")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
-offset_left = -61.0
-offset_top = -100.0
-offset_right = 66.0
-offset_bottom = -73.0
+offset_left = -12.0
+offset_top = -30.0
+offset_right = 106.0
+offset_bottom = -3.0
+scale = Vector2(0.2, 0.2)
 script = ExtResource("4_iyggp")
 
 [node name="AmmoBar" type="ProgressBar" parent="."]
-offset_left = -63.0
-offset_top = 71.0
-offset_right = 65.0
-offset_bottom = 98.0
+offset_left = -13.0
+offset_top = 10.0
+offset_right = 115.0
+offset_bottom = 37.0
+scale = Vector2(0.2, 0.2)
 script = ExtResource("5_mccdw")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -73,4 +75,6 @@ z_index = 2
 texture_filter = 1
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_huibf")
-frame_progress = 0.3042585
+animation = &"walk"
+autoplay = "walk"
+frame_progress = 0.7200192

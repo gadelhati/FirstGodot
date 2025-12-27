@@ -34,6 +34,8 @@ var damage_boost_timer: float = 0.0
 @export var weapon_label: Label
 @export var spawn_point: Node2D
 
+@onready var animated_sprite = $AnimatedSprite2D
+
 func _ready():
 	_init_components()
 	_find_mobile_controls()
