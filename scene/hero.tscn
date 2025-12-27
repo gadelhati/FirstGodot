@@ -6,49 +6,49 @@
 [ext_resource type="Texture2D" uid="uid://dhyfamo4os6s5" path="res://assets/Gru.png" id="5_dbi3s"]
 [ext_resource type="Script" uid="uid://b8oaah41u3he8" path="res://UI/ammo_bar.gd" id="5_mccdw"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_heiwi"]
-radius = 5.5
+[sub_resource type="CircleShape2D" id="CircleShape2D_mccdw"]
+radius = 6.5
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_huibf"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_mccdw"]
 atlas = ExtResource("5_dbi3s")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_buer3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbi3s"]
 atlas = ExtResource("5_dbi3s")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kp47o"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_heiwi"]
 atlas = ExtResource("5_dbi3s")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_0jk1w"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_huibf"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_huibf")
+"texture": SubResource("AtlasTexture_mccdw")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_buer3")
+"texture": SubResource("AtlasTexture_dbi3s")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_kp47o")
+"texture": SubResource("AtlasTexture_heiwi")
 }],
 "loop": true,
 "name": &"default",
-"speed": 10.0
+"speed": 5.0
 }]
 
 [node name="Hero" type="CharacterBody2D" node_paths=PackedStringArray("health_bar", "ammo_bar")]
 collision_mask = 5
+motion_mode = 1
 script = ExtResource("1_xpv8o")
-max_hp = null
 bullet_scene = ExtResource("2_xpv8o")
 health_bar = NodePath("HealthBar")
 ammo_bar = NodePath("AmmoBar")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 0)
-shape = SubResource("CapsuleShape2D_heiwi")
+shape = SubResource("CircleShape2D_mccdw")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -61.0
@@ -65,8 +65,12 @@ offset_bottom = 98.0
 script = ExtResource("5_mccdw")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_0jk1w")
-frame_progress = 0.43091005
+z_index = 2
+texture_filter = 1
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_huibf")
+frame_progress = 0.3042585

@@ -114,12 +114,21 @@ func _connect():
 	weapon.shot_failed.connect(_on_shot_failed)
 	inventory.weapon_changed.connect(_on_weapon_changed)
 
-func _physics_process(delta):
+func _physics_process(delta:float):
+	_isometic(delta)
 	_update_boosts(delta)
 	_move()
 	_shoot()
 	_check_reload()
 	_check_weapon_switch()
+
+func _isometic(delta):
+	var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	if direction != Vector2.ZERO:
+		velocity = direction * 16.0
+	else:
+		velocity = Vector2.ZERO
+	move_and_slide()
 
 func _update_boosts(delta):
 	# Speed boost
