@@ -23,9 +23,9 @@ var ammo: AmmoComponent
 @export var health_bar: HealthBar
 
 @export_group("Contact Damage")
-@export var contact_damage: float = 10.0
+@export var contact_damage: float = 5.0
 @export var damage_cooldown: float = 1.0
-@export var contact_radius: float = 75.0
+@export var contact_radius: float = 2.0
 @export var enable_contact: bool = true
 
 @export_group("AI Behavior")
@@ -33,15 +33,15 @@ var ammo: AmmoComponent
 @export var initial_state: AIStateComponent.State = AIStateComponent.State.PATROL
 
 @export_group("Patrol")
-@export var patrol_speed: float = 85.0
+@export var patrol_speed: float = 55.0
 @export var patrol_points: Array[Vector2] = []
 @export var patrol_loop: bool = true
 
 @export_group("Chase")
-@export var chase_speed: float = 95.0
-@export var detection_range: float = 300.0
-@export var lose_range: float = 500.0
-@export var min_chase_distance: float = 100.0
+@export var chase_speed: float = 75.0
+@export var detection_range: float = 150.0
+@export var lose_range: float = 200.0
+@export var min_chase_distance: float = 50.0
 
 @export_group("Weapon")
 @export var can_shoot: bool = true

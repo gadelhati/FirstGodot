@@ -71,7 +71,7 @@ func get_ammo() -> AmmoComponent:
 	return ammo
 
 func _spawn_bullet(origin: Vector2, direction: Vector2, parent: Node):
-	var spawn_offset = 80.0
+	var spawn_offset = 20.0
 	var spawn_pos = origin + (direction * spawn_offset)
 	
 	var bullet = bullet_scene.instantiate()

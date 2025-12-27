@@ -55,7 +55,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y587k"]
-size = Vector2(42, 42)
+size = Vector2(29, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7vaii"]
 
@@ -74,15 +74,17 @@ script = ExtResource("1_w4bl2")
 respawn_time = 10.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthPack"]
-scale = Vector2(3, 3)
+position = Vector2(2.3841858e-07, -2.6226044e-06)
+scale = Vector2(0.9375, 0.9375)
 sprite_frames = SubResource("SpriteFrames_8fblj")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HealthPack"]
-position = Vector2(1, 1)
+position = Vector2(-0.5, -0.5)
 shape = SubResource("RectangleShape2D_y587k")
 
 [node name="AmmoBox" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_w4bl2")
@@ -98,6 +100,7 @@ scale = Vector2(0.15625, 0.16406249)
 shape = SubResource("RectangleShape2D_7vaii")
 
 [node name="WeaponPickup_Shotgun" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_iilmc")
@@ -112,6 +115,7 @@ scale = Vector2(0.15625, 0.1612903)
 shape = SubResource("RectangleShape2D_f0ihm")
 
 [node name="SpeedBoost" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_w4bl2")
@@ -127,6 +131,7 @@ scale = Vector2(0.16406249, 0.15625)
 shape = SubResource("RectangleShape2D_ft6t2")
 
 [node name="DamageBoost" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_w4bl2")

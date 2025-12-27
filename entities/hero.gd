@@ -18,7 +18,7 @@ var damage_boost: float = 0.0
 var damage_boost_timer: float = 0.0
 
 @export_group("Stats")
-@export var base_speed: float = 100.0
+@export var base_speed: float = 90.0
 @export var max_hp: float = 100.0
 
 @export_group("Starting Weapon")
