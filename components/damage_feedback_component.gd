@@ -1,5 +1,5 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/damage_feedback_component.gd)
+# components/damage_feedback_component.gd
 # ============================================
 class_name DamageFeedbackComponent
 extends RefCounted

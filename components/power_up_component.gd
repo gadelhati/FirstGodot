@@ -1,5 +1,5 @@
 # ============================================
-# components/power_up_component.gd (REFATORADO)
+# components/power_up_component.gd
 # ============================================
 class_name PowerUpComponent
 extends RefCounted

@@ -1,5 +1,5 @@
 # ============================================
-# resources/weapon_data.gd (REFATORADO)
+# resources/weapon_data.gd
 # ============================================
 class_name WeaponData
 extends Resource

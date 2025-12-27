@@ -1,5 +1,5 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/damage_dealer_component.gd)
+# components/damage_dealer_component.gd
 # ============================================
 class_name DamageDealerComponent
 extends RefCounted

@@ -1,5 +1,5 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/health_component.gd)
+# components/health_component.gd
 # ============================================
 class_name HealthComponent
 extends RefCounted

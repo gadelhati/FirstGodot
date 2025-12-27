@@ -1,5 +1,5 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/weapon_component.gd)
+# components/weapon_component.gd
 # ============================================
 class_name WeaponComponent
 extends RefCounted

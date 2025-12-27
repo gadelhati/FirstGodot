@@ -1,5 +1,5 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/contact_damage_component.gd)
+# components/contact_damage_component.gd
 # ============================================
 class_name ContactDamageComponent
 extends RefCounted

@@ -1,5 +1,5 @@
 # ============================================
-# entities/enemy.gd (REFATORADO COM IA)
+# entities/enemy.gd
 # ============================================
 class_name Enemy
 extends CharacterBody2D

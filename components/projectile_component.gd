@@ -1,5 +1,5 @@
 # ============================================
-# COMPONENTES COMPARTILHADOS (components/projectile_component.gd)
+# components/projectile_component.gd
 # ============================================
 class_name ProjectileComponent
 extends RefCounted
