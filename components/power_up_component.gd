@@ -29,8 +29,10 @@ func apply(target: Node) -> bool:
 		return false
 	
 	match type:
-		Type.HEALTH, Type.AMMO:
-			target.call(method, value if type == Type.HEALTH else int(value))
+		Type.HEALTH:
+			target.call(method, value)
+		Type.AMMO:
+			target.call(method, int(value))
 		Type.WEAPON:
 			target.call(method, int(value))
 		Type.SPEED, Type.DAMAGE_BOOST:

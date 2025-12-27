@@ -48,7 +48,7 @@ func is_in_range() -> bool:
 	var distance = owner.global_position.distance_to(target.global_position)
 	return distance <= detection_range
 
-func update(delta: float) -> Vector2:
+func update(_delta: float) -> Vector2:
 	if not target:
 		return Vector2.ZERO
 	

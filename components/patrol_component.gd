@@ -30,7 +30,7 @@ func get_target() -> Vector2:
 	
 	return points[current_index]
 
-func update(delta: float) -> Vector2:
+func update(_delta: float) -> Vector2:
 	if points.is_empty():
 		return Vector2.ZERO
 	

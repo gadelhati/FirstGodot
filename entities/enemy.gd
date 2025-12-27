@@ -192,7 +192,7 @@ func _ai_patrol(_delta):
 	if chase.can_see_target():
 		ai_state.change(AIStateComponent.State.CHASE)
 
-func _ai_chase(delta):
+func _ai_chase(_delta):
 	# Verifica se perdeu o player
 	if chase.lost_target():
 		ai_state.change(AIStateComponent.State.PATROL)
@@ -204,10 +204,10 @@ func _ai_chase(delta):
 		return
 	
 	# Persegue
-	velocity = chase.update(delta)
+	velocity = chase.update(_delta)
 	move_and_slide()
 
-func _ai_attack(delta):
+func _ai_attack(_delta):
 	# Para de se mover
 	velocity = Vector2.ZERO
 	
