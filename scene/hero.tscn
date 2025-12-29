@@ -66,10 +66,6 @@ offset_bottom = 37.0
 scale = Vector2(0.2, 0.2)
 script = ExtResource("5_mccdw")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3, 3)
-position_smoothing_enabled = true
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 2
 texture_filter = 1
