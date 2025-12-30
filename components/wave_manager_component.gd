@@ -23,6 +23,8 @@ var spawn_parent_override: Node = null
 var spawn_around_player: bool = true
 var min_spawn_distance: float = 200.0
 var max_spawn_distance: float = 400.0
+var tilemap_layer: TileMapLayer = null
+var spawn_margin: float = 50.0
 
 func _init(p_owner: Node):
 	owner_node = p_owner
@@ -143,6 +145,11 @@ func _get_spawn_position(spawn_data: EnemySpawn) -> Vector2:
 	if not spawn_data.spawn_points.is_empty():
 		return spawn_data.spawn_points.pick_random()
 	
+	# Se tem TileMapLayer configurado, spawna dentro dele
+	if tilemap_layer:
+		return _get_tilemap_spawn_position()
+	
+	# Se configurado para spawnar ao redor do player
 	if spawn_around_player:
 		var spawn_center = Vector2.ZERO
 		
@@ -156,6 +163,7 @@ func _get_spawn_position(spawn_data: EnemySpawn) -> Vector2:
 		var offset = Vector2(cos(angle), sin(angle)) * distance
 		return spawn_center + offset
 	
+	# Fallback: spawna nas bordas da viewport
 	var viewport = owner_node.get_viewport_rect()
 	var margin = 50.0
 	
@@ -168,6 +176,38 @@ func _get_spawn_position(spawn_data: EnemySpawn) -> Vector2:
 			return Vector2(randf_range(0, viewport.size.x), viewport.size.y + margin)
 		_:
 			return Vector2(-margin, randf_range(0, viewport.size.y))
+
+func _get_tilemap_spawn_position() -> Vector2:
+	var used_rect = tilemap_layer.get_used_rect()
+	var tile_size = tilemap_layer.tile_set.tile_size
+	
+	# Calcula os limites do tilemap em coordenadas globais
+	var tilemap_pos = tilemap_layer.global_position
+	var min_x = tilemap_pos.x + (used_rect.position.x * tile_size.x) + spawn_margin
+	var max_x = tilemap_pos.x + (used_rect.end.x * tile_size.x) - spawn_margin
+	var min_y = tilemap_pos.y + (used_rect.position.y * tile_size.y) + spawn_margin
+	var max_y = tilemap_pos.y + (used_rect.end.y * tile_size.y) - spawn_margin
+	
+	# Se spawn_around_player está ativo, spawna ao redor do player mas dentro do tilemap
+	if spawn_around_player:
+		var player = _find_player()
+		if player:
+			var attempts = 10
+			for i in attempts:
+				var angle = randf() * TAU
+				var distance = randf_range(min_spawn_distance, max_spawn_distance)
+				var offset = Vector2(cos(angle), sin(angle)) * distance
+				var pos = player.global_position + offset
+				
+				# Verifica se está dentro dos limites
+				if pos.x >= min_x and pos.x <= max_x and pos.y >= min_y and pos.y <= max_y:
+					return pos
+	
+	# Fallback: posição aleatória dentro do tilemap
+	return Vector2(
+		randf_range(min_x, max_x),
+		randf_range(min_y, max_y)
+	)
 
 func _find_player() -> Node2D:
 	var root = owner_node.get_tree().root

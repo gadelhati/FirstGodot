@@ -14,6 +14,8 @@ extends Node
 @export var min_spawn_distance: float = 200.0
 @export var max_spawn_distance: float = 400.0
 @export var spawn_parent_node: Node = null
+@export var tilemap_layer: TileMapLayer = null
+@export var spawn_margin: float = 50.0
 
 @export_group("UI")
 @export var wave_label: Label = null
@@ -32,14 +34,16 @@ func _ready():
 	component.spawn_around_player = spawn_around_player
 	component.min_spawn_distance = min_spawn_distance
 	component.max_spawn_distance = max_spawn_distance
+	component.tilemap_layer = tilemap_layer
+	component.spawn_margin = spawn_margin
 	
 	if not waves.is_empty():
 		component.setup(waves, time_limit)
 		
 		if auto_start:
 			start_waves()
-	else:
-		push_warning("WaveManager: Nenhuma onda configurada! Adicione WaveData no Inspector.")
+	# Se não há ondas, assume que serão configuradas por código
+	# Não mostra warning se auto_start está false
 
 func _connect_signals():
 	component.wave_started.connect(_on_wave_started)
@@ -91,7 +95,7 @@ func _on_wave_started(wave_number: int, total_enemies: int):
 func _on_wave_completed(wave_number: int):
 	print("Wave %d completada!" % wave_number)
 
-func _on_enemy_spawned(enemy: Node2D, wave_number: int):
+func _on_enemy_spawned(_enemy: Node2D, _wave_number: int):
 	pass
 
 func _on_all_waves_completed():

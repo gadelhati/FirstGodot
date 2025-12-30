@@ -53,9 +53,12 @@ texture_filter = 1
 position = Vector2(814, 479)
 scale = Vector2(0.6, 0.6)
 
-[node name="WaveManager" type="Node2D" parent="."]
+[node name="WaveManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap_layer")]
 script = ExtResource("7_p1hux")
 auto_start = false
+min_spawn_distance = 100.0
+max_spawn_distance = 200.0
+tilemap_layer = NodePath("../TileMapLayer")
 
 [node name="WaveLabel" type="Label" parent="WaveManager"]
 offset_right = 40.0
