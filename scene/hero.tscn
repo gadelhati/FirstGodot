@@ -74,3 +74,6 @@ sprite_frames = SubResource("SpriteFrames_huibf")
 animation = &"walk"
 autoplay = "walk"
 frame_progress = 0.7200192
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
