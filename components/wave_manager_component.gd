@@ -179,35 +179,60 @@ func _get_spawn_position(spawn_data: EnemySpawn) -> Vector2:
 
 func _get_tilemap_spawn_position() -> Vector2:
 	var used_rect = tilemap_layer.get_used_rect()
-	var tile_size = tilemap_layer.tile_set.tile_size
 	
-	# Calcula os limites do tilemap em coordenadas globais
-	var tilemap_pos = tilemap_layer.global_position
-	var min_x = tilemap_pos.x + (used_rect.position.x * tile_size.x) + spawn_margin
-	var max_x = tilemap_pos.x + (used_rect.end.x * tile_size.x) - spawn_margin
-	var min_y = tilemap_pos.y + (used_rect.position.y * tile_size.y) + spawn_margin
-	var max_y = tilemap_pos.y + (used_rect.end.y * tile_size.y) - spawn_margin
+	# Para mapas isométricos, precisamos garantir que spawnamos em tiles válidos
+	# Pega todos os tiles usados
+	var valid_positions: Array[Vector2] = []
 	
-	# Se spawn_around_player está ativo, spawna ao redor do player mas dentro do tilemap
+	for x in range(used_rect.position.x, used_rect.end.x):
+		for y in range(used_rect.position.y, used_rect.end.y):
+			var tile_coord = Vector2i(x, y)
+			# Verifica se há um tile nesta posição
+			if tilemap_layer.get_cell_source_id(tile_coord) != -1:
+				# Converte coordenada do tile para posição global
+				var world_pos = tilemap_layer.map_to_local(tile_coord)
+				world_pos = tilemap_layer.to_global(world_pos)
+				valid_positions.append(world_pos)
+	
+	if valid_positions.is_empty():
+		push_warning("WaveManager: Nenhum tile válido encontrado no TileMapLayer!")
+		return Vector2.ZERO
+	
+	# Se spawn_around_player está ativo, encontra o tile mais próximo do player
 	if spawn_around_player:
 		var player = _find_player()
 		if player:
-			var attempts = 10
+			var player_pos = player.global_position
+			var attempts = 20
+			
 			for i in attempts:
+				# Calcula posição desejada ao redor do player
 				var angle = randf() * TAU
 				var distance = randf_range(min_spawn_distance, max_spawn_distance)
-				var offset = Vector2(cos(angle), sin(angle)) * distance
-				var pos = player.global_position + offset
+				var desired_pos = player_pos + Vector2(cos(angle), sin(angle)) * distance
 				
-				# Verifica se está dentro dos limites
-				if pos.x >= min_x and pos.x <= max_x and pos.y >= min_y and pos.y <= max_y:
-					return pos
+				# Encontra o tile válido mais próximo desta posição
+				var closest_tile = _find_closest_tile(desired_pos, valid_positions)
+				
+				# Verifica se está dentro da distância aceitável
+				var dist_to_player = closest_tile.distance_to(player_pos)
+				if dist_to_player >= min_spawn_distance * 0.7 and dist_to_player <= max_spawn_distance * 1.3:
+					return closest_tile
 	
-	# Fallback: posição aleatória dentro do tilemap
-	return Vector2(
-		randf_range(min_x, max_x),
-		randf_range(min_y, max_y)
-	)
+	# Fallback: tile aleatório válido
+	return valid_positions.pick_random()
+
+func _find_closest_tile(target_pos: Vector2, tiles: Array[Vector2]) -> Vector2:
+	var closest = tiles[0]
+	var min_dist = target_pos.distance_to(closest)
+	
+	for tile_pos in tiles:
+		var dist = target_pos.distance_to(tile_pos)
+		if dist < min_dist:
+			min_dist = dist
+			closest = tile_pos
+	
+	return closest
 
 func _find_player() -> Node2D:
 	var root = owner_node.get_tree().root
