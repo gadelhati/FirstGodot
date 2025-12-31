@@ -66,7 +66,7 @@ func _update_ui():
 	
 	if timer_label:
 		var remaining = component.get_time_remaining()
-		var minutes = int(remaining) / 60
+		var minutes = floori(remaining / 60.0)
 		var seconds = int(remaining) % 60
 		timer_label.text = "%02d:%02d" % [minutes, seconds]
 	
